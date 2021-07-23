@@ -1,0 +1,210 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  8
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      particleProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solution
+{
+    active          true;
+    coupled         true;
+    transient       yes;
+    cellValueSourceCorrection on;
+
+    interpolationSchemes
+    {
+        rho.air         cell;
+        U.air           cellPoint;
+        mu.air          cell;
+        alpha.air       cell;
+    }
+
+    averagingMethod basic;
+
+    integrationSchemes
+    {
+        U               Euler;
+    }
+
+    sourceTerms
+    {
+        schemes
+        {
+            U semiImplicit 1;
+        }
+    }
+}
+
+constantProperties
+{
+    rho0            8800; //1000;
+
+    alphaMax        0.9; //5e-9;//0.9;
+}
+
+subModels
+{
+    particleForces
+    {
+        WenYuDrag
+        {
+            alphac alpha.air;
+        }
+    }
+
+    injectionModels
+    {
+        /*
+            % matlab/octave calculation of flow rate
+            alpha=0.1
+            U=20
+            A=0.01^2
+            Q=U*A
+            d=650e-6
+            v=(4/3)*pi*(d/2)^3
+            n=1
+            rate=alpha*Q/(v*n)
+        */
+
+        model
+        {
+            type            patchInjection;
+            parcelBasisType fixed;
+            //patchName       inlet;
+            patch       inlet;
+            U0              (10.5 0 0); //(20 0 0);//(18.7939 6.8404 0);
+            nParticle       1;       //particle per parcel
+            parcelsPerSecond  10; //100 //1390885; //tell sir
+            sizeDistribution
+            {
+                //type        normal;     //try with uniform   //normal
+                type        fixedValue;
+                fixedValueDistribution
+                {
+                value     70e-6;//70e-6; // 650e-6;
+                }
+                // normalDistribution
+                // {
+                //     expectation 650e-6;
+                //     variance 25e-6;
+                //     minValue 500e-6;
+                //     maxValue 800e-6;
+                //     // expectation $psize;  //650
+                //     // variance 0;
+                //     // minValue $psize; //500e-1;
+                //     // maxValue $psize; //800e-1;              //-5
+                // }
+            }
+            flowRateProfile constant 1;
+            massTotal       0.079e-05;
+            SOI 0;
+            duration 0.05;
+        }
+
+        // model2
+        // {
+        //     type            patchInjection;
+        //     parcelBasisType fixed;
+        //     patchName       upperInlet;
+        //     U0              (18.7939 -6.8404 0);
+        //     nParticle       1;
+        //     parcelsPerSecond 1390885;
+        //     sizeDistribution
+        //     {
+        //         type        normal;
+        //         normalDistribution
+        //         {
+        //             expectation 650e-6;
+        //             variance 25e-6;
+        //             minValue 500e-6;
+        //             maxValue 800e-6;
+        //         }
+        //     }
+        //     flowRateProfile constant 1;
+        //     massTotal       0;
+        //     SOI 0;
+        //     duration 60;
+        // }
+    }
+
+    dispersionModel none;
+
+    patchInteractionModel localInteraction;
+
+    localInteractionCoeffs
+    {
+        patches
+        (
+            frontAndBack
+            {
+                type rebound;
+                e    1;
+                mu   0;
+            }
+
+            walls
+            {
+                type rebound;
+                e    1;
+                mu   0;
+            }
+
+            "inlet|outlet"
+            {
+                type escape;
+            }
+        );
+    }
+
+    heatTransferModel none;
+
+    surfaceFilmModel none;
+
+    packingModel none;
+
+    dampingModel relaxation;
+
+    relaxationCoeffs
+    {
+        timeScaleModel
+        {
+            type nonEquilibrium;
+            alphaPacked 0.58;
+            e 0.9;
+        }
+    }
+
+    isotropyModel stochastic;
+
+    stochasticCoeffs
+    {
+        timeScaleModel
+        {
+            type isotropic;
+            alphaPacked 0.58;
+            e 0.9;
+        }
+    }
+
+    stochasticCollisionModel none;
+
+    radiation off;
+}
+
+
+cloudFunctions
+{}
+
+
+// ************************************************************************* //

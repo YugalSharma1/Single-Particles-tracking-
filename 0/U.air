@@ -1,0 +1,65 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  8
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{   
+    inlet
+    {
+        type            fixedValue;
+        value           uniform (18.78 0 0);
+        
+        // type               mapped;
+        // value              uniform (9.39 0 0);
+        // interpolationScheme cell;
+        // setAverage true;
+        // average (10.5 0 0); 
+
+        // type turbulentInlet;
+        // referenceField uniform (9.39 0 0);
+        // fluctuationScale (0.02 0.01 0.01);
+        // value uniform (9.39 0 0);
+
+    
+        // type        turbulentIntensityKineticEnergyInlet;
+        // intensity   0.05;
+        // value uniform (9.39 0 0);;//value       <field value>;
+
+    }
+
+
+    walls
+    {
+        //type            noSlip;
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    frontAndBack
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //
