@@ -92,7 +92,7 @@ subModels
                 type        fixedValue;
                 fixedValueDistribution
                 {
-                value     70e-6;
+                value     700e-6;
                 }
            
             }
