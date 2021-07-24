@@ -85,57 +85,24 @@ subModels
             patch       inlet;
             U0              (10.5 0 0); //(20 0 0);//(18.7939 6.8404 0);
             nParticle       1;       //particle per parcel
-            parcelsPerSecond  10; //100 //1390885; //tell sir
+            parcelsPerSecond  1000; //100 //1390885; //tell sir
             sizeDistribution
             {
                 //type        normal;     //try with uniform   //normal
                 type        fixedValue;
                 fixedValueDistribution
                 {
-                value     70e-6;//70e-6; // 650e-6;
+                value     70e-6;
                 }
-                // normalDistribution
-                // {
-                //     expectation 650e-6;
-                //     variance 25e-6;
-                //     minValue 500e-6;
-                //     maxValue 800e-6;
-                //     // expectation $psize;  //650
-                //     // variance 0;
-                //     // minValue $psize; //500e-1;
-                //     // maxValue $psize; //800e-1;              //-5
-                // }
+           
             }
             flowRateProfile constant 1;
             massTotal       0.079e-05;
             SOI 0;
-            duration 0.05;
+            duration 0.001;
         }
 
-        // model2
-        // {
-        //     type            patchInjection;
-        //     parcelBasisType fixed;
-        //     patchName       upperInlet;
-        //     U0              (18.7939 -6.8404 0);
-        //     nParticle       1;
-        //     parcelsPerSecond 1390885;
-        //     sizeDistribution
-        //     {
-        //         type        normal;
-        //         normalDistribution
-        //         {
-        //             expectation 650e-6;
-        //             variance 25e-6;
-        //             minValue 500e-6;
-        //             maxValue 800e-6;
-        //         }
-        //     }
-        //     flowRateProfile constant 1;
-        //     massTotal       0;
-        //     SOI 0;
-        //     duration 60;
-        // }
+        
     }
 
     dispersionModel none;
