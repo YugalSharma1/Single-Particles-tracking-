@@ -5,7 +5,7 @@ import re
 def get_string_from_file(dir_path, regEx):
     dir_list = os.listdir(dir_path)
     print(dir_list)
-    outfile = open('outfile2.csv', 'w')
+    outfile = open('outfile3.csv', 'w')
     for file in dir_list:
         try:
             file_path = os.path.join(dir_path, file,'lagrangian','kinematicCloud','positions')
